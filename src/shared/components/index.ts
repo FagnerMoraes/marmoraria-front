@@ -1,1 +1,1 @@
-export { };
+export * from './side-menu/SideBar';
