@@ -1,12 +1,29 @@
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { Avatar, Collapse, Divider, Drawer, Icon, List, ListItemButton, ListItemIcon, ListItemText, useTheme } from '@mui/material';
 import { Box } from '@mui/system';
+import PersonAddAlt1 from '@mui/icons-material/PersonAddAlt1';
+import DomainAdd from '@mui/icons-material/DomainAdd';
+import LibraryAdd from '@mui/icons-material/LibraryAdd';
 import React from 'react';
 
 interface ISideBarProps {
     children: React.ReactNode;
   }
 
+  interface IListItemLinkProps{
+
+  }
+
+  const ListItemLink: React.FC<IListItemLinkProps> = ({ }) => {
+    return(
+      <ListItemButton>
+        <ListItemIcon>
+            <Icon>dashboard</Icon>                    
+        </ListItemIcon>
+        <ListItemText primary="Inicio" />
+      </ListItemButton>
+    );
+  };
 
 
 export const SideBar: React.FC<ISideBarProps> = ({children}) => {
@@ -35,11 +52,11 @@ export const SideBar: React.FC<ISideBarProps> = ({children}) => {
                   <ListItemIcon>
                    <Icon>dashboard</Icon>                    
                 </ListItemIcon>
-                <ListItemText primary="Dashboard" />
+                <ListItemText primary="Inicio" />
               </ListItemButton>
               <ListItemButton onClick={handleClick}>
               <ListItemIcon>
-               <Icon> inboxIcon </Icon> 
+               <LibraryAdd />
               </ListItemIcon>
               <ListItemText primary="Cadastro" />
               {open ? <ExpandLess /> : <ExpandMore />}
@@ -48,15 +65,15 @@ export const SideBar: React.FC<ISideBarProps> = ({children}) => {
         <List component="div" disablePadding>
           <ListItemButton sx={{ pl: 4 }}>
             <ListItemIcon>
-              <Icon>starBorder</Icon>
+              <PersonAddAlt1 />
             </ListItemIcon>
-            <ListItemText primary="Starred" />
+            <ListItemText primary="Cliente" />
           </ListItemButton>
           <ListItemButton sx={{ pl: 4 }}>
             <ListItemIcon>
-              <Icon>starBorder</Icon>
+              <DomainAdd />
             </ListItemIcon>
-            <ListItemText primary="Starred" />
+            <ListItemText primary="Fornecedor" />
           </ListItemButton>
         </List>
       </Collapse>
