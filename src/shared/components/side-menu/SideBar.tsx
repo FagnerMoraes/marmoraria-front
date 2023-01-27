@@ -1,10 +1,11 @@
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import { Avatar, Collapse, Divider, Drawer, Icon, List, ListItemButton, ListItemIcon, ListItemText, useTheme } from '@mui/material';
+import { Avatar, Collapse, Divider, Drawer, Icon, List, ListItemButton, ListItemIcon, ListItemText, useMediaQuery, useTheme } from '@mui/material';
 import { Box } from '@mui/system';
 import PersonAddAlt1 from '@mui/icons-material/PersonAddAlt1';
 import DomainAdd from '@mui/icons-material/DomainAdd';
 import LibraryAdd from '@mui/icons-material/LibraryAdd';
 import React from 'react';
+import { useDrawerContext } from '../../contexts';
 
 interface ISideBarProps {
     children: React.ReactNode;
@@ -28,16 +29,18 @@ interface ISideBarProps {
 
 export const SideBar: React.FC<ISideBarProps> = ({children}) => {
   const theme = useTheme();
-
+  const smDown = useMediaQuery(theme.breakpoints.down('sm'));
   const [open, setOpen] = React.useState(false);
  
+  const { isDrawerOpen, toggleDrawerOpen } = useDrawerContext();
+
   const handleClick = () => {
     setOpen(!open);
   };
 
     return (
     <>
-    <Drawer variant='permanent'>
+    <Drawer open={isDrawerOpen} variant={smDown ?'temporary': 'permanent'} onClose={toggleDrawerOpen}>
         <Box width={theme.spacing(28)} height="100%" display="flex" flexDirection="column">
             <Box width="100%" height={theme.spacing(14)} 
                 display="flex" alignItems="Center" justifyContent="center" >
@@ -81,7 +84,7 @@ export const SideBar: React.FC<ISideBarProps> = ({children}) => {
             </Box>   
         </Box>
     </Drawer>
-    <Box height="100vh" marginLeft={theme.spacing(28)} >
+    <Box height="100vh" marginLeft={smDown ? 0 : theme.spacing(28)} >
     {children}
     </Box>
     </>
