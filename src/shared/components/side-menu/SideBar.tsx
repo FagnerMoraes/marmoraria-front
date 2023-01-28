@@ -1,27 +1,37 @@
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import { Avatar, Collapse, Divider, Drawer, Icon, List, ListItemButton, ListItemIcon, ListItemText, useMediaQuery, useTheme } from '@mui/material';
+import { Avatar, Divider, Drawer, Icon, List, ListItemButton, ListItemIcon, ListItemText, useMediaQuery, useTheme } from '@mui/material';
 import { Box } from '@mui/system';
-import PersonAddAlt1 from '@mui/icons-material/PersonAddAlt1';
-import DomainAdd from '@mui/icons-material/DomainAdd';
-import LibraryAdd from '@mui/icons-material/LibraryAdd';
 import React from 'react';
 import { useDrawerContext } from '../../contexts';
+import { useMatch, useNavigate, useResolvedPath } from 'react-router-dom';
 
 interface ISideBarProps {
     children: React.ReactNode;
   }
 
   interface IListItemLinkProps{
-
+    to: string;
+    icon: string;
+    label: string;
+    onClick: (() => void) | undefined;
   }
 
-  const ListItemLink: React.FC<IListItemLinkProps> = ({ }) => {
+  const ListItemLink: React.FC<IListItemLinkProps> = ({ to, icon, label, onClick }) => {
+    const navigate = useNavigate();
+
+    const resolvedPath = useResolvedPath(to);
+    const match = useMatch({ path: resolvedPath.pathname, end: false });
+
+
+    const handleClick = () =>{
+      navigate(to);
+      onClick?.();
+    };
     return(
-      <ListItemButton>
+      <ListItemButton selected={!!match} onClick={handleClick}>
         <ListItemIcon>
-            <Icon>dashboard</Icon>                    
+            <Icon>{icon}</Icon>                    
         </ListItemIcon>
-        <ListItemText primary="Inicio" />
+        <ListItemText primary={label} />
       </ListItemButton>
     );
   };
@@ -32,7 +42,7 @@ export const SideBar: React.FC<ISideBarProps> = ({children}) => {
   const smDown = useMediaQuery(theme.breakpoints.down('sm'));
   const [open, setOpen] = React.useState(false);
  
-  const { isDrawerOpen, toggleDrawerOpen } = useDrawerContext();
+  const { isDrawerOpen, toggleDrawerOpen, drawerOptions } = useDrawerContext();
 
   const handleClick = () => {
     setOpen(!open);
@@ -51,35 +61,16 @@ export const SideBar: React.FC<ISideBarProps> = ({children}) => {
             <Divider />
             <Box flex={1}>
               <List component="nav">
-                <ListItemButton>
-                  <ListItemIcon>
-                   <Icon>dashboard</Icon>                    
-                </ListItemIcon>
-                <ListItemText primary="Inicio" />
-              </ListItemButton>
-              <ListItemButton onClick={handleClick}>
-              <ListItemIcon>
-               <LibraryAdd />
-              </ListItemIcon>
-              <ListItemText primary="Cadastro" />
-              {open ? <ExpandLess /> : <ExpandMore />}
-            </ListItemButton>
-            <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }}>
-            <ListItemIcon>
-              <PersonAddAlt1 />
-            </ListItemIcon>
-            <ListItemText primary="Cliente" />
-          </ListItemButton>
-          <ListItemButton sx={{ pl: 4 }}>
-            <ListItemIcon>
-              <DomainAdd />
-            </ListItemIcon>
-            <ListItemText primary="Fornecedor" />
-          </ListItemButton>
-        </List>
-      </Collapse>
+                  {drawerOptions.map(drawerOption =>(
+                    <ListItemLink
+                    to={drawerOption.path}
+                    key={drawerOption.path}
+                    icon={drawerOption.icon}                    
+                    label={drawerOption.label}
+                    onClick={smDown ? toggleDrawerOpen : undefined}
+                    />
+                  ))}
+                  
               </List>
             </Box>   
         </Box>
