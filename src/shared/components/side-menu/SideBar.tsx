@@ -1,7 +1,7 @@
 import { Avatar, Divider, Drawer, Icon, List, ListItemButton, ListItemIcon, ListItemText, useMediaQuery, useTheme } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
-import { useDrawerContext } from '../../contexts';
+import { useAppThemeContext, useDrawerContext } from '../../contexts';
 import { useMatch, useNavigate, useResolvedPath } from 'react-router-dom';
 
 interface ISideBarProps {
@@ -43,6 +43,7 @@ export const SideBar: React.FC<ISideBarProps> = ({children}) => {
   const [open, setOpen] = React.useState(false);
  
   const { isDrawerOpen, toggleDrawerOpen, drawerOptions } = useDrawerContext();
+  const {toggleTheme} = useAppThemeContext();
 
   const handleClick = () => {
     setOpen(!open);
@@ -72,6 +73,14 @@ export const SideBar: React.FC<ISideBarProps> = ({children}) => {
                   ))}
                   
               </List>
+            </Box>
+            <Box>
+              <ListItemButton  onClick={toggleTheme}>
+                <ListItemIcon>
+                  <Icon>dark_mode</Icon>                    
+                </ListItemIcon>
+                <ListItemText primary="Alternar tema" />
+              </ListItemButton>
             </Box>   
         </Box>
     </Drawer>
